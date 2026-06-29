@@ -1,8 +1,0 @@
-
-> customer-food-delivery-app@1.0.0 start
-> expo start --go --lan --clear --port 8087
-
-Starting project at D:\food-delivery-app\customer-food-delivery-app
-Using src/app as the root directory for Expo Router.
-Starting Metro Bundler
-warning: Bundler cache is empty, rebuilding (this may take a minute)

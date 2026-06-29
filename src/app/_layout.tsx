@@ -2,6 +2,9 @@ import { Tabs } from 'expo-router';
 import { Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
+import { AddressProvider } from '@/context/address-context';
+import { CartProvider } from '@/context/cart-context';
+
 export { ErrorBoundary } from 'expo-router';
 
 const HOME_ICON = require('@/assets/images/tabIcons/home.png');
@@ -9,9 +12,11 @@ const BROWSE_ICON = require('@/assets/images/tabIcons/explore.png');
 
 export default function RootLayout() {
   return (
-    <>
-      <StatusBar style="dark" />
-      <Tabs
+    <CartProvider>
+      <AddressProvider>
+        <StatusBar style="dark" />
+        <Tabs
+        backBehavior="history"
         screenOptions={{
           headerShown: false,
           sceneStyle: styles.scene,
@@ -22,6 +27,34 @@ export default function RootLayout() {
         }}>
         <Tabs.Screen
           name="index"
+          options={{
+            href: null,
+            tabBarStyle: styles.hiddenTabBar,
+          }}
+        />
+        <Tabs.Screen
+          name="address-details"
+          options={{
+            href: null,
+            tabBarStyle: styles.hiddenTabBar,
+          }}
+        />
+        <Tabs.Screen
+          name="restaurant/[id]"
+          options={{
+            href: null,
+            tabBarStyle: styles.hiddenTabBar,
+          }}
+        />
+        <Tabs.Screen
+          name="cart"
+          options={{
+            href: null,
+            tabBarStyle: styles.hiddenTabBar,
+          }}
+        />
+        <Tabs.Screen
+          name="home"
           options={{
             title: 'Home',
             tabBarIcon: ({ color }) => (
@@ -38,13 +71,15 @@ export default function RootLayout() {
             ),
           }}
         />
-      </Tabs>
-    </>
+        </Tabs>
+      </AddressProvider>
+    </CartProvider>
   );
 }
 
 const styles = StyleSheet.create({
   scene: { backgroundColor: '#FBFAF8' },
+  hiddenTabBar: { display: 'none' },
   tabBar: {
     backgroundColor: '#FFFFFF',
     borderTopColor: '#ECE9E4',

@@ -14,6 +14,7 @@
     },
     "android": {
       "package": "com.customerfooddelivery.app",
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -28,6 +29,12 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow Foodie to use your location to find restaurants and deliver orders to your address."
+        }
+      ],
       [
         "expo-splash-screen",
         {
