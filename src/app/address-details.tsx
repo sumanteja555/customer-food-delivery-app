@@ -25,6 +25,7 @@ type AddressParams = {
   city?: string;
   region?: string;
   postalCode?: string;
+  returnTo?: string;
 };
 
 type FieldProps = {
@@ -61,7 +62,6 @@ export default function AddressDetailsScreen() {
   const [house, setHouse] = useState('');
   const [street, setStreet] = useState(params.street ?? '');
   const [area, setArea] = useState(params.area ?? '');
-  const [landmark, setLandmark] = useState('');
   const [city, setCity] = useState(params.city ?? '');
   const [region, setRegion] = useState(params.region ?? '');
   const [postalCode, setPostalCode] = useState(params.postalCode ?? '');
@@ -86,14 +86,14 @@ export default function AddressDetailsScreen() {
       house: house.trim(),
       street: street.trim(),
       area: area.trim(),
-      landmark: landmark.trim(),
+      landmark: '',
       city: city.trim(),
       region: region.trim(),
       postalCode: postalCode.trim(),
       instructions: instructions.trim(),
       formattedAddress,
     });
-    router.replace('/home');
+    router.replace(params.returnTo === 'cart' ? '/cart' : '/home');
   };
 
   return (
@@ -148,7 +148,6 @@ export default function AddressDetailsScreen() {
           <AddressField label="House / Flat / Floor" value={house} onChangeText={setHouse} placeholder="e.g. Flat 302, 3rd floor" />
           <AddressField label="Street" value={street} onChangeText={setStreet} placeholder="Street or building name" />
           <AddressField label="Area / Locality" value={area} onChangeText={setArea} placeholder="Area or neighbourhood" optional />
-          <AddressField label="Nearby landmark" value={landmark} onChangeText={setLandmark} placeholder="e.g. Opposite City Mall" optional />
           <View style={styles.twoColumns}>
             <View style={styles.column}><AddressField label="City" value={city} onChangeText={setCity} placeholder="City" /></View>
             <View style={styles.column}><AddressField label="State" value={region} onChangeText={setRegion} placeholder="State" /></View>

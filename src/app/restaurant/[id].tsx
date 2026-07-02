@@ -86,16 +86,10 @@ export default function RestaurantScreen() {
               style={({ pressed }) => [styles.roundButton, pressed && styles.pressed]}>
               <Text style={styles.backIcon}>‹</Text>
             </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`Open cart with ${totalItems} items`}
-              onPress={() => router.push('/cart')}
-              style={({ pressed }) => [styles.roundButton, pressed && styles.pressed]}>
-              <Text style={styles.cartIcon}>🛒</Text>
-              {totalItems > 0 && (
-                <View style={styles.cartBadge}><Text style={styles.cartBadgeText}>{totalItems}</Text></View>
-              )}
-            </Pressable>
+            <View style={styles.locationHeader}>
+              <Text style={styles.locationHeaderLabel}>RESTAURANT LOCATION</Text>
+              <Text style={styles.locationHeaderText} numberOfLines={2}>{restaurant.address}</Text>
+            </View>
           </View>
         </View>
 
@@ -233,12 +227,12 @@ const styles = StyleSheet.create({
   hero: { height: 260, backgroundColor: '#DDD7CF' },
   heroImage: { ...StyleSheet.absoluteFillObject },
   heroShade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(15,12,10,0.14)' },
-  heroActions: { position: 'absolute', left: 18, right: 18, flexDirection: 'row', justifyContent: 'space-between' },
+  heroActions: { position: 'absolute', left: 18, right: 18, flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   roundButton: { width: 46, height: 46, borderRadius: 15, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', shadowColor: '#17120D', shadowOpacity: 0.16, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 4 },
+  locationHeader: { flex: 1, minHeight: 46, borderRadius: 15, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10, paddingVertical: 6, shadowColor: '#17120D', shadowOpacity: 0.16, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 4 },
+  locationHeaderLabel: { color: ORANGE, fontSize: 8, lineHeight: 10, fontWeight: '900', letterSpacing: 0.7 },
+  locationHeaderText: { color: '#29282C', fontSize: 11, lineHeight: 14, fontWeight: '700', textAlign: 'center', marginTop: 2 },
   backIcon: { color: '#222226', fontSize: 37, lineHeight: 39, marginTop: -4 },
-  cartIcon: { fontSize: 20 },
-  cartBadge: { position: 'absolute', top: -6, right: -5, minWidth: 20, height: 20, borderRadius: 10, paddingHorizontal: 5, backgroundColor: ORANGE, alignItems: 'center', justifyContent: 'center' },
-  cartBadgeText: { color: '#FFFFFF', fontSize: 10, fontWeight: '900' },
   restaurantInfo: { backgroundColor: '#FBFAF8', borderTopLeftRadius: 30, borderTopRightRadius: 30, marginTop: -28, paddingHorizontal: 20, paddingTop: 23, paddingBottom: 22 },
   restaurantName: { color: '#19191C', fontSize: 27, lineHeight: 33, fontWeight: '900', letterSpacing: -0.6 },
   cuisine: { color: '#77767B', fontSize: 13, marginTop: 7 },

@@ -1,4 +1,5 @@
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { Alert } from 'react-native';
 
 import type { MenuItem } from '@/data/restaurants';
 
@@ -25,6 +26,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
 
   const addItem = useCallback((restaurantId: string, item: MenuItem) => {
+    const hasItemsFromAnotherRestaurant = lines.some(
+      (line) => line.restaurantId !== restaurantId,
+    );
+
+    if (hasItemsFromAnotherRestaurant) {
+      Alert.alert(
+        'Replace items in your cart?',
+        'Your cart contains items from another restaurant. Continuing will clear those items and add this one instead.',
+        [
+          { text: 'No', style: 'cancel' },
+          {
+            text: 'Yes',
+            style: 'destructive',
+            onPress: () => setLines([{ restaurantId, item, quantity: 1 }]),
+          },
+        ],
+      );
+      return;
+    }
+
     setLines((current) => {
       const existing = current.find((line) => line.item.id === item.id);
       if (existing) {
@@ -34,7 +55,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...current, { restaurantId, item, quantity: 1 }];
     });
-  }, []);
+  }, [lines]);
 
   const incrementItem = useCallback((itemId: string) => {
     setLines((current) =>

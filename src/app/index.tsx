@@ -42,8 +42,10 @@ const formatGeocodedAddress = (address: Location.LocationGeocodedAddress) =>
 export default function LocationSetupScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const params = useLocalSearchParams<{ add?: string }>();
+  const params = useLocalSearchParams<{ add?: string; details?: string; returnTo?: string }>();
   const isChangingLocation = params.add === '1';
+  const needsAddressDetails = params.details === '1';
+  const shouldReturnToCart = params.returnTo === 'cart';
   const { deliveryLocation, isHydrated, setDeliveryLocation } = useAddresses();
   const hasStarted = useRef(false);
   const [screenState, setScreenState] = useState<ScreenState>('initializing');
@@ -231,6 +233,19 @@ export default function LocationSetupScreen() {
 
   const confirmManualLocation = async () => {
     if (!canConfirmLocation) return;
+    if (needsAddressDetails) {
+      router.push({
+        pathname: '/address-details',
+        params: {
+          latitude: String(coordinate.latitude),
+          longitude: String(coordinate.longitude),
+          city: selectedCity.name,
+          region: selectedCity.region,
+          returnTo: shouldReturnToCart ? 'cart' : 'home',
+        },
+      });
+      return;
+    }
     await setDeliveryLocation({
       ...coordinate,
       city: selectedCity.name,
@@ -238,7 +253,7 @@ export default function LocationSetupScreen() {
       formattedAddress: `${selectedCity.name}, ${selectedCity.region}`,
       source: 'manual',
     });
-    router.replace('/home');
+    router.replace(shouldReturnToCart ? '/cart' : '/home');
   };
 
   if (screenState !== 'manual') {
@@ -348,7 +363,13 @@ export default function LocationSetupScreen() {
               pressed && styles.pressed,
             ]}>
             <Text style={styles.confirmButtonText}>
-              {canConfirmLocation ? `Show restaurants in ${selectedCity.name}` : "We're not here yet"}
+              {canConfirmLocation
+                ? needsAddressDetails
+                  ? 'Continue to address details'
+                  : shouldReturnToCart
+                    ? 'Use this delivery location'
+                    : `Show restaurants in ${selectedCity.name}`
+                : "We're not here yet"}
             </Text>
           </Pressable>
         </View>
